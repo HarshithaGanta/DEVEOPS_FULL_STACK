@@ -1,0 +1,119 @@
+body{
+  margin:0;
+  font-family:Georgia,serif;
+  background:white;
+}
+
+/* TOP BAR */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 40px;
+  background:linear-gradient(90deg,#3b6eea,#8a3ffc);
+  color:white;
+}
+.profile-grid{
+  display:grid;
+  grid-template-columns:150px auto;
+  row-gap:16px;
+  column-gap:20px;
+  margin-top:20px;
+  font-size:18px;
+}
+
+.profile-grid div{
+  color:white;
+}
+.profile-grid{
+  display:grid;
+  grid-template-columns:140px 20px auto;
+  row-gap:16px;
+  column-gap:12px;
+  margin-top:20px;
+  font-size:18px;
+  color:white;
+}
+
+.profile-grid div:nth-child(3n+1){
+  font-weight:bold;
+}
+
+.profile-grid div:nth-child(odd){
+  font-weight:bold;
+}
+
+.logo{
+  font-size:22px;
+  font-weight:bold;
+}
+
+.nav-links{
+  display:flex;
+  gap:25px;
+}
+
+.nav-item{
+  color:white;
+  text-decoration:none;
+  padding:8px 20px;
+  border-radius:20px;
+  font-weight:bold;
+}
+
+.nav-item.active{
+  background:#28c76f;
+}
+
+/* CONTENT */
+.content{
+  padding:40px;
+}
+
+.card-row{
+  display:flex;
+  gap:30px;
+  margin-top:30px;
+}
+
+.card{
+  width:280px;
+  padding:30px;
+  border-radius:20px;
+  color:white;
+}
+
+.green{background:linear-gradient(135deg,#2ecc71,#145a32);}
+.blue{background:linear-gradient(135deg,#4a7bd0,#0b1c2d);}
+.orange{background:linear-gradient(135deg,#f39c12,#4a2600);}
+
+/* COURSES */
+.course-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:25px;
+  margin-top:30px;
+}
+
+.course{
+  padding:25px;
+  border-radius:20px;
+  background:linear-gradient(135deg,#facc15,#fb923c);
+  font-weight:bold;
+}
+
+/* PROFILE */
+.profile-center{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:70vh;
+}
+
+.profile-card{
+  padding:40px 60px;
+  border-radius:25px;
+  background:linear-gradient(135deg,#ec4899,#8b5cf6);
+  color:white;
+  width:350px;
+}
