@@ -22,4 +22,5 @@ jobs:
         run: npm install
 
       - name: Run Integration Tests
-        run: npm test
+        run: npx jest --detectOpenHandles --forceExit
+
