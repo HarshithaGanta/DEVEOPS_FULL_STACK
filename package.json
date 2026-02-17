@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "npx jest --detectOpenHandles --forceExit"
+    "test": "node ./node_modules/jest/bin/jest.js --detectOpenHandles --forceExit"
+
 
   },
   "author": "",
