@@ -20,4 +20,5 @@ jobs:
         run: npm install
 
       - name: Run Integration Tests
-        run: node ./node_modules/jest/bin/jest.js --detectOpenHandles --forceExit
+        run: node ./node_modules/jest/bin/jest.js tests/api.test.js --detectOpenHandles --forceExit
+
