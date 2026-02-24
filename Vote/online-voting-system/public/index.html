@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Online Voting System</title>
+<style>
+body{
+font-family:Arial;
+background:linear-gradient(135deg,#a18cd1,#fbc2eb);
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
+}
+.container{
+background:white;
+padding:40px;
+border-radius:20px;
+box-shadow:0 15px 35px rgba(0,0,0,0.2);
+text-align:center;
+width:350px;
+}
+h2{
+color:#6a11cb;
+}
+select{
+width:100%;
+padding:10px;
+border-radius:10px;
+margin:15px 0;
+}
+button{
+background:linear-gradient(45deg,#ff416c,#ff4b2b);
+color:white;
+border:none;
+padding:12px;
+width:100%;
+border-radius:25px;
+cursor:pointer;
+}
+a{
+display:block;
+margin-top:20px;
+text-decoration:none;
+color:#ff416c;
+font-weight:bold;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>🗳️ Cast Your Vote</h2>
+
+<form action="/vote" method="POST">
+<select name="candidate_name" required>
+<option value="Alice">Alice</option>
+<option value="Bob">Bob</option>
+<option value="Charlie">Charlie</option>
+</select>
+<button type="submit">Vote Now</button>
+</form>
+
+<a href="results.html">View Results</a>
+</div>
+
+</body>
+</html>

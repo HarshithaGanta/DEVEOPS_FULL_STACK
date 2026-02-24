@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Voting Results</title>
+<style>
+body{
+font-family:Arial;
+background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
+}
+.container{
+background:white;
+padding:40px;
+border-radius:20px;
+box-shadow:0 15px 35px rgba(0,0,0,0.2);
+text-align:center;
+width:350px;
+}
+h2{
+color:#ff416c;
+}
+p{
+font-size:18px;
+font-weight:bold;
+}
+a{
+display:block;
+margin-top:20px;
+text-decoration:none;
+color:#ff416c;
+font-weight:bold;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>📊 Current Vote Count</h2>
+
+<div id="results"></div>
+
+<a href="index.html">Back to Voting</a>
+</div>
+
+<script>
+fetch('/votes')
+.then(res=>res.json())
+.then(data=>{
+    let output=""
+    for(let candidate in data){
+        output+=`<p>${candidate}: ${data[candidate]}</p>`
+    }
+    document.getElementById("results").innerHTML=output
+})
+</script>
+
+</body>
+</html>
