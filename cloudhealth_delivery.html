@@ -1,0 +1,713 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0e1a;--bg2:#111827;--bg3:#1a2235;--bg4:#1e2d45;
+  --accent:#00d4ff;--accent2:#7c3aed;
+  --text:#e8edf5;--text2:#8b9ab5;--text3:#4a5670;
+  --card:#141d2e;--border:#1e2d45;
+  --red:#ef4444;--green:#10b981;--blue:#3b82f6;--purple:#8b5cf6;--amber:#f59e0b;
+  --font-head:'Syne',sans-serif;--font:'DM Sans',sans-serif;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;overflow-x:hidden}
+
+/* ═══ AUTH ═══ */
+#auth-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;position:relative;overflow:hidden}
+.blob{position:absolute;border-radius:50%;pointer-events:none;filter:blur(80px);opacity:.15}
+.blob1{width:500px;height:500px;background:var(--accent);top:-160px;right:-160px}
+.blob2{width:380px;height:380px;background:var(--accent2);bottom:-100px;left:-100px}
+.auth-card{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:36px 36px 32px;width:420px;position:relative;z-index:1;box-shadow:0 40px 80px rgba(0,0,0,.5);animation:fadeUp .5s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.logo{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:28px}
+.logo-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.logo-text{font-family:var(--font-head);font-size:24px;font-weight:800}
+.logo-text em{color:var(--accent);font-style:normal}
+.tabs{display:flex;background:var(--bg3);border-radius:12px;padding:4px;margin-bottom:24px;gap:4px}
+.tab{flex:1;padding:9px;text-align:center;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--text2)}
+.tab.active{background:var(--card);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.form-group{margin-bottom:13px;position:relative}
+.form-group label{display:block;font-size:11px;font-weight:600;color:var(--text2);margin-bottom:5px;letter-spacing:.6px;text-transform:uppercase}
+.form-group input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-family:var(--font);font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s}
+.form-group input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,212,255,.08)}
+.form-group input::placeholder{color:var(--text3)}
+.pw-wrap{position:relative}
+.pw-wrap input{padding-right:44px}
+.eye-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text3);font-size:15px;padding:4px;transition:color .2s;line-height:1}
+.eye-btn:hover{color:var(--accent)}
+.form-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.form-row label{font-size:13px;color:var(--text2);display:flex;align-items:center;gap:7px;cursor:pointer}
+.form-row label input[type=checkbox]{accent-color:var(--accent);width:15px;height:15px}
+.form-row a{font-size:13px;color:var(--accent);text-decoration:none}
+.name-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.role-label{font-size:11px;font-weight:600;color:var(--text2);margin-bottom:7px;letter-spacing:.6px;text-transform:uppercase}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:13px}
+.role-opt{padding:9px 8px;border:1px solid var(--border);border-radius:9px;background:var(--bg3);color:var(--text2);font-size:12px;font-weight:500;cursor:pointer;text-align:center;transition:all .2s}
+.role-opt:hover{border-color:rgba(0,212,255,.4);color:var(--text)}
+.role-opt.picked{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.07)}
+.submit-btn{width:100%;padding:13px;border:none;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-family:var(--font-head);font-size:15px;font-weight:700;cursor:pointer;transition:opacity .2s,transform .1s;letter-spacing:.3px;margin-top:4px}
+.submit-btn:hover{opacity:.88}
+.submit-btn:active{transform:scale(.98)}
+.divider{text-align:center;color:var(--text3);font-size:12px;margin:14px 0;position:relative}
+.divider::before,.divider::after{content:'';position:absolute;top:50%;width:44%;height:1px;background:var(--border)}
+.divider::before{left:0}.divider::after{right:0}
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.quick-btn{padding:9px 8px;border:1px solid var(--border);border-radius:9px;background:var(--bg3);color:var(--text2);font-size:12px;cursor:pointer;text-align:center;transition:all .2s}
+.quick-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.05)}
+.terms{font-size:11px;color:var(--text3);text-align:center;margin-top:13px;line-height:1.6}
+.terms a{color:var(--text2);text-decoration:none}
+.strength-bar{display:flex;gap:4px;margin-top:5px}
+.strength-seg{flex:1;height:3px;border-radius:2px;background:var(--bg4);transition:background .3s}
+.strength-label{font-size:10px;color:var(--text3);margin-top:3px;text-align:right;min-height:14px}
+.apage{display:none}
+.apage.show{display:block;animation:fadeUp .3s ease}
+
+/* ═══ APP ═══ */
+#app-screen{display:none;height:100vh;overflow:hidden}
+#app-screen.visible{display:flex}
+
+/* SIDEBAR */
+.sidebar{width:240px;background:var(--card);border-right:1px solid var(--border);display:flex;flex-direction:column;transition:width .3s;flex-shrink:0;position:relative;z-index:10}
+.sidebar.collapsed{width:64px}
+.sidebar-header{padding:18px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);min-height:62px}
+.sb-logo{width:32px;height:32px;border-radius:8px;flex-shrink:0;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:14px}
+.sb-brand{font-family:var(--font-head);font-size:16px;font-weight:800;white-space:nowrap;overflow:hidden;transition:opacity .2s,width .3s}
+.sb-brand em{color:var(--accent);font-style:normal}
+.sidebar.collapsed .sb-brand{opacity:0;width:0}
+.sb-toggle{margin-left:auto;width:28px;height:28px;border:1px solid var(--border);border-radius:6px;background:transparent;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;font-size:14px}
+.sb-toggle:hover{background:var(--bg3);color:var(--text)}
+.sidebar.collapsed .sb-toggle{margin-left:0}
+.sb-section{padding:10px 8px 2px}
+.sb-section-lbl{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);padding:0 8px;margin-bottom:5px;white-space:nowrap;overflow:hidden;transition:opacity .2s}
+.sidebar.collapsed .sb-section-lbl{opacity:0}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;cursor:pointer;transition:all .2s;position:relative;margin-bottom:2px;color:var(--text2)}
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:rgba(0,212,255,.1);color:var(--accent)}
+.nav-item.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:60%;background:var(--accent);border-radius:2px}
+.nav-icon{width:20px;height:20px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px}
+.nav-label{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;transition:opacity .2s,width .3s}
+.sidebar.collapsed .nav-label{opacity:0;width:0}
+.nav-badge{margin-left:auto;background:var(--accent2);color:#fff;font-size:10px;padding:2px 6px;border-radius:10px;flex-shrink:0;transition:opacity .2s}
+.sidebar.collapsed .nav-badge{opacity:0}
+.sb-footer{margin-top:auto;border-top:1px solid var(--border);padding:10px 8px}
+.user-card{display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;cursor:pointer;transition:background .2s;margin-bottom:6px}
+.user-card:hover{background:var(--bg3)}
+.user-av{width:32px;height:32px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#10b981,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff}
+.user-info{overflow:hidden;transition:opacity .2s,width .3s}
+.sidebar.collapsed .user-info{opacity:0;width:0}
+.user-name{font-size:13px;font-weight:600;white-space:nowrap}
+.user-role{font-size:11px;color:var(--text2);white-space:nowrap}
+.sb-logout{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;cursor:pointer;transition:all .2s;color:var(--red);border:1px solid rgba(239,68,68,.2);background:rgba(239,68,68,.04)}
+.sb-logout:hover{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.4)}
+.sb-logout .nav-label{color:var(--red)}
+.sidebar.collapsed .sb-logout{justify-content:center}
+
+/* TOPBAR */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:62px;background:var(--card);border-bottom:1px solid var(--border);padding:0 22px;display:flex;align-items:center;gap:14px;flex-shrink:0}
+.topbar-title{font-family:var(--font-head);font-size:18px;font-weight:800;flex:1}
+.tb-search{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:7px 12px;width:210px}
+.tb-search input{background:transparent;border:none;outline:none;color:var(--text);font-size:13px;font-family:var(--font);width:100%}
+.tb-search input::placeholder{color:var(--text3)}
+.tb-actions{display:flex;gap:8px;align-items:center}
+.tb-btn{width:34px;height:34px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all .2s;position:relative}
+.tb-btn:hover{background:var(--bg3);color:var(--text)}
+.notif-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--red);border:2px solid var(--card)}
+.live-badge{display:flex;align-items:center;gap:7px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);border-radius:20px;padding:6px 12px}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(16,185,129,.6)}60%{box-shadow:0 0 0 6px rgba(16,185,129,0)}100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}}
+.live-txt{font-size:12px;font-weight:600;color:var(--green);white-space:nowrap}
+
+/* CONTENT */
+.content{flex:1;overflow-y:auto;padding:22px}
+.page{display:none;animation:fadeUp .3s ease}
+.page.active{display:block}
+
+/* COMPONENTS */
+.sec-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.sec-hdr h2{font-family:var(--font-head);font-size:21px;font-weight:800}
+.hdr-acts{display:flex;gap:8px}
+.btn-sm{padding:7px 13px;border:1px solid var(--border);border-radius:8px;background:var(--bg3);color:var(--text);font-size:12px;cursor:pointer;transition:all .2s}
+.btn-sm:hover{border-color:var(--accent);color:var(--accent)}
+.btn-sm.pri{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;font-weight:600}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;position:relative;overflow:hidden;transition:transform .2s}
+.stat-card:hover{transform:translateY(-2px)}
+.stat-card::before{content:'';position:absolute;top:0;right:0;width:80px;height:80px;border-radius:50%;opacity:.1;transform:translate(30%,-30%)}
+.stat-card.bl::before{background:var(--blue)}.stat-card.gr::before{background:var(--green)}.stat-card.pu::before{background:var(--purple)}.stat-card.am::before{background:var(--amber)}
+.s-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;margin-bottom:10px}
+.stat-card.bl .s-icon{background:rgba(59,130,246,.15);color:var(--blue)}
+.stat-card.gr .s-icon{background:rgba(16,185,129,.15);color:var(--green)}
+.stat-card.pu .s-icon{background:rgba(139,92,246,.15);color:var(--purple)}
+.stat-card.am .s-icon{background:rgba(245,158,11,.15);color:var(--amber)}
+.s-val{font-family:var(--font-head);font-size:26px;font-weight:800;line-height:1;margin-bottom:3px}
+.s-lbl{font-size:12px;color:var(--text2)}
+.s-chg{font-size:11px;margin-top:7px}
+.s-chg.up{color:var(--green)}.s-chg.dn{color:var(--red)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.grid3{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:18px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px}
+.card-t{font-size:11px;font-weight:600;color:var(--text2);margin-bottom:14px;letter-spacing:.3px;text-transform:uppercase}
+.badge{display:inline-flex;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:500}
+.badge.gr{background:rgba(16,185,129,.15);color:var(--green)}
+.badge.bl{background:rgba(59,130,246,.15);color:var(--blue)}
+.badge.rd{background:rgba(239,68,68,.15);color:var(--red)}
+.badge.am{background:rgba(245,158,11,.15);color:var(--amber)}
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;padding:7px 10px;border-bottom:1px solid var(--border);text-align:left}
+.data-table td{padding:9px 10px;font-size:13px;border-bottom:1px solid rgba(30,45,69,.5)}
+.data-table tr:hover td{background:var(--bg3)}
+.av-sm{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;margin-right:7px;vertical-align:middle}
+.vital-row{display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg3);border-radius:10px;margin-bottom:7px}
+.v-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.v-info{flex:1}
+.v-name{font-size:11px;color:var(--text2);margin-bottom:2px}
+.v-val{font-size:17px;font-weight:700;font-family:var(--font-head)}
+.v-bar{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.v-fill{height:100%;border-radius:2px;transition:width 1.5s ease}
+.act-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.act-item:last-child{border-bottom:none}
+.act-icon{width:30px;height:30px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px}
+.act-txt{flex:1}
+.act-title{font-size:13px;font-weight:500;margin-bottom:1px}
+.act-sub{font-size:11px;color:var(--text2)}
+.act-time{font-size:11px;color:var(--text3)}
+.chart-bars{display:flex;align-items:flex-end;gap:7px;height:110px;margin-bottom:7px}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;height:100%}
+.b-inner{display:flex;gap:2px;align-items:flex-end;flex:1;width:100%}
+.bar{border-radius:3px 3px 0 0;width:100%;transition:height .6s ease;cursor:pointer}
+.bar:hover{filter:brightness(1.2)}
+.bar.b-bl{background:linear-gradient(to top,#1d4ed8,var(--blue))}
+.bar.b-gr{background:linear-gradient(to top,#065f46,var(--green))}
+.bar-lbl{font-size:10px;color:var(--text3)}
+.chart-leg{display:flex;gap:14px;margin-top:3px}
+.leg-i{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2)}
+.leg-dot{width:7px;height:7px;border-radius:50%}
+.donut-wrap{display:flex;align-items:center;gap:18px}
+.d-legend{flex:1}
+.d-item{display:flex;align-items:center;gap:7px;margin-bottom:9px}
+.d-bar{flex:1;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.d-fill{height:100%;border-radius:2px;transition:width 1s ease}
+.d-lbl{font-size:11px;color:var(--text2);width:80px}
+.d-val{font-size:12px;font-weight:600;width:28px;text-align:right}
+.prog-item{margin-bottom:13px}
+.prog-hdr{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+.prog-bar{height:5px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px;transition:width 1.2s ease}
+.ai-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.ai-card{background:var(--bg3);border:1px solid var(--border);border-radius:11px;padding:14px;cursor:pointer;transition:all .2s}
+.ai-card:hover,.ai-card.sel{border-color:var(--accent);background:rgba(0,212,255,.05)}
+.ai-icon{font-size:22px;margin-bottom:7px}
+.ai-name{font-size:13px;font-weight:600;margin-bottom:3px}
+.ai-desc{font-size:11px;color:var(--text2);line-height:1.5}
+.ai-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.ai-met{background:var(--bg3);border-radius:10px;padding:13px;text-align:center}
+.ai-met-val{font-size:21px;font-weight:800;font-family:var(--font-head);color:var(--accent)}
+.ai-met-lbl{font-size:11px;color:var(--text2);margin-top:3px}
+.tog{position:relative;width:42px;height:24px;flex-shrink:0}
+.tog input{opacity:0;width:0;height:0}
+.tog-slider{position:absolute;inset:0;background:var(--bg3);border-radius:12px;cursor:pointer;border:1px solid var(--border);transition:background .2s}
+.tog-slider::before{content:'';position:absolute;width:18px;height:18px;background:var(--text3);border-radius:50%;top:2px;left:2px;transition:transform .2s,background .2s}
+.tog input:checked+.tog-slider{background:rgba(0,212,255,.2);border-color:var(--accent)}
+.tog input:checked+.tog-slider::before{transform:translateX(18px);background:var(--accent)}
+.set-section{margin-bottom:24px}
+.set-title{font-family:var(--font-head);font-size:14px;font-weight:800;margin-bottom:14px;padding-bottom:7px;border-bottom:1px solid var(--border)}
+.set-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(30,45,69,.4)}
+.set-lbl{font-size:13px;font-weight:500;margin-bottom:2px}
+.set-desc{font-size:12px;color:var(--text2)}
+
+/* LOGOUT OVERLAY */
+#logout-screen{display:none;align-items:center;justify-content:center;min-height:100vh;background:var(--bg);position:relative;overflow:hidden}
+#logout-screen.show{display:flex}
+.lo-blob1{width:500px;height:500px;background:var(--accent);top:-160px;right:-160px}
+.lo-blob2{width:380px;height:380px;background:var(--accent2);bottom:-100px;left:-100px}
+.lo-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:44px 38px;text-align:center;width:380px;animation:fadeUp .4s ease;position:relative;z-index:1}
+.lo-icon{font-size:46px;margin-bottom:14px}
+.lo-title{font-family:var(--font-head);font-size:22px;font-weight:800;margin-bottom:7px}
+.lo-sub{color:var(--text2);font-size:13px;margin-bottom:22px;line-height:1.6}
+.btn-grp{display:flex;gap:10px}
+.btn-pri{flex:1;padding:11px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-family:var(--font-head);font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s}
+.btn-pri:hover{opacity:.85}
+.btn-sec{flex:1;padding:11px;border:1px solid var(--border);border-radius:10px;background:var(--bg3);color:var(--text);font-family:var(--font);font-size:14px;cursor:pointer;transition:all .2s}
+.btn-sec:hover{background:var(--bg4)}
+
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px}
+</style>
+</head>
+<body>
+
+<!-- ═══ AUTH SCREEN ═══ -->
+<div id="auth-screen">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="auth-card">
+    <div class="logo">
+      <div class="logo-icon">🏥</div>
+      <div class="logo-text">Cloud<em>Health</em> AI</div>
+    </div>
+    <div class="tabs">
+      <div class="tab active" id="tab-login" onclick="switchTab('login')">Log in</div>
+      <div class="tab" id="tab-signup" onclick="switchTab('signup')">Create account</div>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="apage show" id="apage-login">
+      <div class="form-group">
+        <label>Email address</label>
+        <input type="email" placeholder="dr.name@hospital.org" value="dr.sharma@cloudhealth.ai">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="login-pw" placeholder="Enter your password" value="password123">
+          <button class="eye-btn" onclick="toggleEye('login-pw','eye-l')"><span id="eye-l">👁</span></button>
+        </div>
+      </div>
+      <div class="form-row">
+        <label><input type="checkbox" checked> Remember me</label>
+        <a href="#">Forgot password?</a>
+      </div>
+      <button class="submit-btn" onclick="doLogin()">Log in →</button>
+      <div class="divider">Quick access</div>
+      <div class="quick-grid">
+        <div class="quick-btn" onclick="doLogin()">👨‍⚕️ Physician</div>
+        <div class="quick-btn" onclick="doLogin()">👩‍⚕️ Nurse</div>
+        <div class="quick-btn" onclick="doLogin()">🛡️ Admin</div>
+        <div class="quick-btn" onclick="doLogin()">🔬 Researcher</div>
+      </div>
+    </div>
+
+    <!-- SIGN UP -->
+    <div class="apage" id="apage-signup">
+      <div class="name-row">
+        <div class="form-group"><label>First name</label><input type="text" placeholder="Arjun"></div>
+        <div class="form-group"><label>Last name</label><input type="text" placeholder="Sharma"></div>
+      </div>
+      <div class="form-group"><label>Work email</label><input type="email" placeholder="dr.name@hospital.org"></div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="su-pw" placeholder="Create a strong password" oninput="checkStr(this.value)">
+          <button class="eye-btn" onclick="toggleEye('su-pw','eye-s')"><span id="eye-s">👁</span></button>
+        </div>
+        <div class="strength-bar"><div class="strength-seg" id="ss1"></div><div class="strength-seg" id="ss2"></div><div class="strength-seg" id="ss3"></div><div class="strength-seg" id="ss4"></div></div>
+        <div class="strength-label" id="str-lbl"></div>
+      </div>
+      <div class="form-group">
+        <label>Confirm password</label>
+        <div class="pw-wrap">
+          <input type="password" id="cf-pw" placeholder="Re-enter password">
+          <button class="eye-btn" onclick="toggleEye('cf-pw','eye-c')"><span id="eye-c">👁</span></button>
+        </div>
+      </div>
+      <div class="role-label">Your role</div>
+      <div class="role-grid">
+        <div class="role-opt picked" onclick="pickRole(this)">👨‍⚕️ Physician</div>
+        <div class="role-opt" onclick="pickRole(this)">👩‍⚕️ Nurse</div>
+        <div class="role-opt" onclick="pickRole(this)">🛡️ Admin</div>
+        <div class="role-opt" onclick="pickRole(this)">🔬 Researcher</div>
+      </div>
+      <button class="submit-btn" onclick="doLogin()">Create Account →</button>
+      <div class="terms">By signing up you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ APP SCREEN ═══ -->
+<div id="app-screen">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sb-logo">🏥</div>
+      <div class="sb-brand">Cloud<em>Health</em></div>
+      <button class="sb-toggle" onclick="toggleSB()">☰</button>
+    </div>
+    <div class="sb-section">
+      <div class="sb-section-lbl">Main</div>
+      <div class="nav-item active" onclick="showPage('overview',this)"><div class="nav-icon">📊</div><div class="nav-label">Overview</div></div>
+      <div class="nav-item" onclick="showPage('patients',this)"><div class="nav-icon">👥</div><div class="nav-label">Patients</div><div class="nav-badge">142</div></div>
+      <div class="nav-item" onclick="showPage('monitoring',this)"><div class="nav-icon">💓</div><div class="nav-label">Monitoring</div><div class="nav-badge">●</div></div>
+      <div class="nav-item" onclick="showPage('imaging',this)"><div class="nav-icon">🔬</div><div class="nav-label">Medical Imaging</div></div>
+    </div>
+    <div class="sb-section">
+      <div class="sb-section-lbl">Advanced</div>
+      <div class="nav-item" onclick="showPage('ai',this)"><div class="nav-icon">🤖</div><div class="nav-label">AI Engine</div></div>
+      <div class="nav-item" onclick="showPage('genomics',this)"><div class="nav-icon">🧬</div><div class="nav-label">Genomics</div></div>
+      <div class="nav-item" onclick="showPage('analytics',this)"><div class="nav-icon">📈</div><div class="nav-label">Analytics</div></div>
+      <div class="nav-item" onclick="showPage('telemedicine',this)"><div class="nav-icon">📡</div><div class="nav-label">Telemedicine</div></div>
+    </div>
+    <div class="sb-section">
+      <div class="sb-section-lbl">System</div>
+      <div class="nav-item" onclick="showPage('ehr',this)"><div class="nav-icon">📋</div><div class="nav-label">EHR Records</div></div>
+      <div class="nav-item" onclick="showPage('settings',this)"><div class="nav-icon">⚙️</div><div class="nav-label">Settings</div></div>
+    </div>
+    <div class="sb-footer">
+      <div class="user-card">
+        <div class="user-av">DS</div>
+        <div class="user-info"><div class="user-name">Dr. Sharma</div><div class="user-role">Chief Physician</div></div>
+      </div>
+      <div class="sb-logout nav-item" onclick="showLogout()">
+        <div class="nav-icon">⇠</div>
+        <div class="nav-label">Logout</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="page-title">Overview</div>
+      <div class="tb-search"><span style="color:var(--text3);font-size:13px">🔍</span><input type="text" placeholder="Search patients, records..."></div>
+      <div class="tb-actions">
+        <button class="tb-btn">🔔<div class="notif-dot"></div></button>
+        <button class="tb-btn">💬</button>
+        <button class="tb-btn">❓</button>
+        <div class="live-badge"><div class="live-dot"></div><span class="live-txt">System is Live</span></div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- OVERVIEW -->
+      <div class="page active" id="page-overview">
+        <div class="sec-hdr"><h2>Dashboard Overview</h2><div class="hdr-acts"><button class="btn-sm">This Week ▾</button><button class="btn-sm pri">+ New Patient</button></div></div>
+        <div class="stats-grid">
+          <div class="stat-card bl"><div class="s-icon">👥</div><div class="s-val">2,847</div><div class="s-lbl">Total Patients</div><div class="s-chg up">↑ 12% from last month</div></div>
+          <div class="stat-card gr"><div class="s-icon">✅</div><div class="s-val">94.2%</div><div class="s-lbl">Recovery Rate</div><div class="s-chg up">↑ 2.1% improvement</div></div>
+          <div class="stat-card pu"><div class="s-icon">🤖</div><div class="s-val">1,204</div><div class="s-lbl">AI Diagnoses Today</div><div class="s-chg up">↑ 8% accuracy gain</div></div>
+          <div class="stat-card am"><div class="s-icon">📡</div><div class="s-val">348</div><div class="s-lbl">Remote Consultations</div><div class="s-chg dn">↓ 3% this week</div></div>
+        </div>
+        <div class="grid3">
+          <div class="card">
+            <div class="card-t">Patient Admissions — Last 7 Days</div>
+            <div class="chart-bars" id="adm-chart"></div>
+            <div class="chart-leg"><div class="leg-i"><div class="leg-dot" style="background:var(--blue)"></div>Inpatient</div><div class="leg-i"><div class="leg-dot" style="background:var(--green)"></div>Outpatient</div></div>
+          </div>
+          <div class="card">
+            <div class="card-t">Department Load</div>
+            <div class="donut-wrap">
+              <svg width="88" height="88" viewBox="0 0 88 88" style="flex-shrink:0">
+                <circle cx="44" cy="44" r="34" fill="none" stroke="#1e2d45" stroke-width="10"/>
+                <circle cx="44" cy="44" r="34" fill="none" stroke="#3b82f6" stroke-width="10" stroke-dasharray="85 129" stroke-dashoffset="0" transform="rotate(-90 44 44)"/>
+                <circle cx="44" cy="44" r="34" fill="none" stroke="#10b981" stroke-width="10" stroke-dasharray="53 161" stroke-dashoffset="-85" transform="rotate(-90 44 44)"/>
+                <circle cx="44" cy="44" r="34" fill="none" stroke="#8b5cf6" stroke-width="10" stroke-dasharray="43 171" stroke-dashoffset="-138" transform="rotate(-90 44 44)"/>
+                <text x="44" y="48" text-anchor="middle" fill="#e8edf5" font-size="13" font-weight="700" font-family="Syne,sans-serif">100%</text>
+              </svg>
+              <div class="d-legend">
+                <div class="d-item"><div class="d-lbl">Cardiology</div><div class="d-bar"><div class="d-fill" style="width:40%;background:var(--blue)"></div></div><div class="d-val">40%</div></div>
+                <div class="d-item"><div class="d-lbl">Neurology</div><div class="d-bar"><div class="d-fill" style="width:25%;background:var(--green)"></div></div><div class="d-val">25%</div></div>
+                <div class="d-item"><div class="d-lbl">Oncology</div><div class="d-bar"><div class="d-fill" style="width:20%;background:var(--purple)"></div></div><div class="d-val">20%</div></div>
+                <div class="d-item"><div class="d-lbl">Others</div><div class="d-bar"><div class="d-fill" style="width:15%;background:var(--amber)"></div></div><div class="d-val">15%</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="grid2">
+          <div class="card">
+            <div class="card-t">Recent Activity</div>
+            <div class="act-item"><div class="act-icon" style="background:rgba(59,130,246,.15);color:var(--blue)">🏥</div><div class="act-txt"><div class="act-title">New patient admitted — Ward 3B</div><div class="act-sub">Priya Menon · Cardiac arrhythmia</div></div><div class="act-time">2m ago</div></div>
+            <div class="act-item"><div class="act-icon" style="background:rgba(16,185,129,.15);color:var(--green)">🤖</div><div class="act-txt"><div class="act-title">AI diagnosis confirmed — 98.4% confidence</div><div class="act-sub">Type 2 diabetes · Raj Kumar</div></div><div class="act-time">11m ago</div></div>
+            <div class="act-item"><div class="act-icon" style="background:rgba(245,158,11,.15);color:var(--amber)">📡</div><div class="act-txt"><div class="act-title">Telemedicine consultation completed</div><div class="act-sub">Dr. Anand · Remote · Chennai</div></div><div class="act-time">34m ago</div></div>
+            <div class="act-item"><div class="act-icon" style="background:rgba(239,68,68,.15);color:var(--red)">⚠️</div><div class="act-txt"><div class="act-title">Critical alert — ICU Bed 4</div><div class="act-sub">SpO₂ dropped below 92%</div></div><div class="act-time">1h ago</div></div>
+          </div>
+          <div class="card">
+            <div class="card-t">Live Vitals — ICU Patient #047</div>
+            <div class="vital-row"><div class="v-icon" style="background:rgba(239,68,68,.15);color:var(--red)">❤️</div><div class="v-info"><div class="v-name">Heart Rate</div><div class="v-val">78 <span style="font-size:11px;color:var(--text2)">bpm</span></div></div><div style="flex:1"><div class="v-bar"><div class="v-fill" style="width:65%;background:var(--red)"></div></div></div></div>
+            <div class="vital-row"><div class="v-icon" style="background:rgba(59,130,246,.15);color:var(--blue)">🩸</div><div class="v-info"><div class="v-name">Blood Pressure</div><div class="v-val">120/80</div></div><div style="flex:1"><div class="v-bar"><div class="v-fill" style="width:55%;background:var(--blue)"></div></div></div></div>
+            <div class="vital-row"><div class="v-icon" style="background:rgba(16,185,129,.15);color:var(--green)">🫁</div><div class="v-info"><div class="v-name">SpO₂</div><div class="v-val">97 <span style="font-size:11px;color:var(--text2)">%</span></div></div><div style="flex:1"><div class="v-bar"><div class="v-fill" style="width:97%;background:var(--green)"></div></div></div></div>
+            <div class="vital-row"><div class="v-icon" style="background:rgba(245,158,11,.15);color:var(--amber)">🌡️</div><div class="v-info"><div class="v-name">Temperature</div><div class="v-val">37.2 <span style="font-size:11px;color:var(--text2)">°C</span></div></div><div style="flex:1"><div class="v-bar"><div class="v-fill" style="width:45%;background:var(--amber)"></div></div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PATIENTS -->
+      <div class="page" id="page-patients">
+        <div class="sec-hdr"><h2>Patient Records</h2><div class="hdr-acts"><button class="btn-sm">Filter ▾</button><button class="btn-sm">Export</button><button class="btn-sm pri">+ Add Patient</button></div></div>
+        <div class="card"><table class="data-table"><thead><tr><th>Patient</th><th>Age</th><th>Condition</th><th>Ward</th><th>Status</th><th>Last Visit</th><th>AI Risk</th></tr></thead><tbody>
+          <tr><td><span class="av-sm">PM</span>Priya Menon</td><td>54</td><td>Cardiac Arrhythmia</td><td>Ward 3B</td><td><span class="badge gr">Stable</span></td><td>Today</td><td><span class="badge rd">High</span></td></tr>
+          <tr><td><span class="av-sm" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">RK</span>Raj Kumar</td><td>62</td><td>Type 2 Diabetes</td><td>OPD</td><td><span class="badge bl">Monitoring</span></td><td>Yesterday</td><td><span class="badge am">Medium</span></td></tr>
+          <tr><td><span class="av-sm" style="background:linear-gradient(135deg,#10b981,#3b82f6)">SA</span>Sneha Agarwal</td><td>38</td><td>Hypertension</td><td>Ward 1A</td><td><span class="badge gr">Stable</span></td><td>2 days ago</td><td><span class="badge gr">Low</span></td></tr>
+          <tr><td><span class="av-sm" style="background:linear-gradient(135deg,#8b5cf6,#ec4899)">MR</span>Mohan Rao</td><td>71</td><td>COPD</td><td>ICU</td><td><span class="badge rd">Critical</span></td><td>Today</td><td><span class="badge rd">High</span></td></tr>
+          <tr><td><span class="av-sm" style="background:linear-gradient(135deg,#06b6d4,#6366f1)">AN</span>Anika Nair</td><td>29</td><td>Anxiety Disorder</td><td>OPD</td><td><span class="badge bl">Monitoring</span></td><td>3 days ago</td><td><span class="badge gr">Low</span></td></tr>
+          <tr><td><span class="av-sm" style="background:linear-gradient(135deg,#f97316,#fbbf24)">VP</span>Vijay Pillai</td><td>45</td><td>Kidney Disease</td><td>Ward 2C</td><td><span class="badge am">Observation</span></td><td>Today</td><td><span class="badge am">Medium</span></td></tr>
+        </tbody></table></div>
+      </div>
+
+      <!-- MONITORING -->
+      <div class="page" id="page-monitoring">
+        <div class="sec-hdr"><h2>Remote Patient Monitoring</h2><div class="hdr-acts"><button class="btn-sm pri">● Live Feed</button></div></div>
+        <div class="stats-grid">
+          <div class="stat-card gr"><div class="s-icon">📡</div><div class="s-val">89</div><div class="s-lbl">Devices Online</div><div class="s-chg up">↑ All systems normal</div></div>
+          <div class="stat-card" style="border-color:rgba(239,68,68,.3)"><div class="s-icon" style="background:rgba(239,68,68,.15);color:var(--red)">🚨</div><div class="s-val">3</div><div class="s-lbl">Active Alerts</div><div class="s-chg dn">↓ Needs attention</div></div>
+          <div class="stat-card bl"><div class="s-icon">💗</div><div class="s-val">78</div><div class="s-lbl">Avg Heart Rate</div><div class="s-chg up">↑ Within normal range</div></div>
+          <div class="stat-card pu"><div class="s-icon">🔋</div><div class="s-val">98%</div><div class="s-lbl">Device Uptime</div><div class="s-chg up">↑ Excellent</div></div>
+        </div>
+        <div class="card"><div class="card-t">RPM — 3 Tier Architecture</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+            <div style="background:var(--bg3);border-radius:10px;padding:14px;border-left:3px solid var(--blue)"><div style="font-size:10px;color:var(--text3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px">Tier 1 — Acquisition</div><div style="font-size:13px;font-weight:600;margin-bottom:6px">Data Collection</div><div style="font-size:11px;color:var(--text2)">Wearables · IoT Sensors · ECG · SpO₂ · Glucometers</div></div>
+            <div style="background:var(--bg3);border-radius:10px;padding:14px;border-left:3px solid var(--green)"><div style="font-size:10px;color:var(--text3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px">Tier 2 — Processing</div><div style="font-size:13px;font-weight:600;margin-bottom:6px">AI Analysis</div><div style="font-size:11px;color:var(--text2)">Edge Computing · Anomaly Detection · Predictive Alerts</div></div>
+            <div style="background:var(--bg3);border-radius:10px;padding:14px;border-left:3px solid var(--purple)"><div style="font-size:10px;color:var(--text3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px">Tier 3 — End Users</div><div style="font-size:13px;font-weight:600;margin-bottom:6px">Clinical Action</div><div style="font-size:11px;color:var(--text2)">Physician Alerts · Hospital DB · Alarm System</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- IMAGING -->
+      <div class="page" id="page-imaging">
+        <div class="sec-hdr"><h2>Medical Imaging & AI</h2><div class="hdr-acts"><button class="btn-sm pri">Upload Scan</button></div></div>
+        <div class="grid2">
+          <div class="card"><div class="card-t">AI Segmentation Models</div>
+            <div style="display:flex;flex-direction:column;gap:9px">
+              <div style="background:var(--bg3);border-radius:8px;padding:11px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:500">U-Net Architecture</div><div style="font-size:11px;color:var(--text2)">Tumor segmentation · MRI/CT</div></div><span class="badge gr">Active</span></div>
+              <div style="background:var(--bg3);border-radius:8px;padding:11px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:500">MedSAM Universal</div><div style="font-size:11px;color:var(--text2)">Multi-modal segmentation</div></div><span class="badge gr">Active</span></div>
+              <div style="background:var(--bg3);border-radius:8px;padding:11px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:500">CNN Classifier</div><div style="font-size:11px;color:var(--text2)">X-ray anomaly detection</div></div><span class="badge bl">Standby</span></div>
+              <div style="background:var(--bg3);border-radius:8px;padding:11px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:500">PET/MRI Alzheimer's</div><div style="font-size:11px;color:var(--text2)">Neurodegenerative detection</div></div><span class="badge am">Training</span></div>
+            </div>
+          </div>
+          <div class="card"><div class="card-t">Scan Queue</div>
+            <div style="background:var(--bg3);border-radius:10px;padding:14px;margin-bottom:9px;border-left:3px solid var(--red)"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:13px;font-weight:500">Mohan Rao — CT Chest</span><span class="badge rd">Urgent</span></div><div style="font-size:11px;color:var(--text2)">AI processing · 94%</div><div style="background:var(--bg);height:3px;border-radius:2px;margin-top:7px;overflow:hidden"><div style="width:94%;height:100%;background:var(--red);border-radius:2px"></div></div></div>
+            <div style="background:var(--bg3);border-radius:10px;padding:14px;margin-bottom:9px;border-left:3px solid var(--blue)"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:13px;font-weight:500">Priya Menon — MRI Heart</span><span class="badge bl">Processing</span></div><div style="font-size:11px;color:var(--text2)">Digital twin generation · 60%</div><div style="background:var(--bg);height:3px;border-radius:2px;margin-top:7px;overflow:hidden"><div style="width:60%;height:100%;background:var(--blue);border-radius:2px"></div></div></div>
+            <div style="background:var(--bg3);border-radius:10px;padding:14px;border-left:3px solid var(--green)"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:13px;font-weight:500">Raj Kumar — X-ray</span><span class="badge gr">Complete</span></div><div style="font-size:11px;color:var(--text2)">No anomalies · 99.1% confidence</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI ENGINE -->
+      <div class="page" id="page-ai">
+        <div class="sec-hdr"><h2>AI Engine</h2><div class="hdr-acts"><button class="btn-sm pri">Run Inference</button></div></div>
+        <div class="card" style="margin-bottom:16px"><div class="card-t">Active AI Models</div>
+          <div class="ai-grid">
+            <div class="ai-card sel"><div class="ai-icon">🧠</div><div class="ai-name">Clinical Decision AI</div><div class="ai-desc">Evidence-based diagnosis support with 96.8% accuracy on cardiovascular conditions</div></div>
+            <div class="ai-card"><div class="ai-icon">💬</div><div class="ai-name">NLP Medical Coder</div><div class="ai-desc">Automated ICD-10 coding and medical summary generation from clinical notes</div></div>
+            <div class="ai-card"><div class="ai-icon">🔮</div><div class="ai-name">Predictive Analytics</div><div class="ai-desc">Forecasts patient deterioration 6–12 hours ahead using multi-modal signals</div></div>
+            <div class="ai-card"><div class="ai-icon">💊</div><div class="ai-name">Drug Discovery AI</div><div class="ai-desc">Knowledge graph for drug repurposing — identified Baricitinib in 48 hours</div></div>
+            <div class="ai-card"><div class="ai-icon">🤗</div><div class="ai-name">Mental Health NLP</div><div class="ai-desc">Sentiment analysis and CBT-guided chatbot for anxiety and depression screening</div></div>
+            <div class="ai-card"><div class="ai-icon">🧬</div><div class="ai-name">Genomic AI</div><div class="ai-desc">Deep learning for variant calling, biomarker discovery and pharmacogenomics</div></div>
+          </div>
+        </div>
+        <div class="ai-metrics">
+          <div class="ai-met"><div class="ai-met-val">96.8%</div><div class="ai-met-lbl">Diagnostic Accuracy</div></div>
+          <div class="ai-met"><div class="ai-met-val" style="color:var(--green)">8 mo</div><div class="ai-met-lbl">Drug Discovery Speed</div></div>
+          <div class="ai-met"><div class="ai-met-val" style="color:var(--purple)">18</div><div class="ai-met-lbl">Genomic Biomarkers Found</div></div>
+        </div>
+      </div>
+
+      <!-- GENOMICS -->
+      <div class="page" id="page-genomics">
+        <div class="sec-hdr"><h2>Genomics & Personalised Medicine</h2></div>
+        <div class="stats-grid">
+          <div class="stat-card bl"><div class="s-icon">🧬</div><div class="s-val">1,847</div><div class="s-lbl">Genomes Sequenced</div><div class="s-chg up">↑ 23% this quarter</div></div>
+          <div class="stat-card gr"><div class="s-icon">🎯</div><div class="s-val">96%</div><div class="s-lbl">Targeted Therapy Match</div><div class="s-chg up">↑ Precision improving</div></div>
+          <div class="stat-card pu"><div class="s-icon">🔬</div><div class="s-val">18</div><div class="s-lbl">Biomarkers Identified</div><div class="s-chg up">↑ CV disease markers</div></div>
+          <div class="stat-card am"><div class="s-icon">💊</div><div class="s-val">312</div><div class="s-lbl">Pharmacogenomic Tests</div><div class="s-chg up">↑ Drug safety improved</div></div>
+        </div>
+        <div class="grid2">
+          <div class="card"><div class="card-t">Research Programs</div>
+            <div class="prog-item"><div class="prog-hdr"><span>Inherited Cardiac Conditions</span><span style="color:var(--blue)">78%</span></div><div class="prog-bar"><div class="prog-fill" style="width:78%;background:var(--blue)"></div></div></div>
+            <div class="prog-item"><div class="prog-hdr"><span>Cardiovascular Biomarkers</span><span style="color:var(--green)">96%</span></div><div class="prog-bar"><div class="prog-fill" style="width:96%;background:var(--green)"></div></div></div>
+            <div class="prog-item"><div class="prog-hdr"><span>Rare Genetic Disorders</span><span style="color:var(--purple)">54%</span></div><div class="prog-bar"><div class="prog-fill" style="width:54%;background:var(--purple)"></div></div></div>
+            <div class="prog-item"><div class="prog-hdr"><span>Alzheimer's Genetic Risk</span><span style="color:var(--amber)">41%</span></div><div class="prog-bar"><div class="prog-fill" style="width:41%;background:var(--amber)"></div></div></div>
+          </div>
+          <div class="card"><div class="card-t">Treatment Outcomes</div>
+            <div style="display:flex;flex-direction:column;gap:9px">
+              <div style="background:var(--bg3);padding:12px;border-radius:8px"><div style="font-size:12px;color:var(--text2)">Improved efficacy vs standard protocols</div><div style="font-size:22px;font-weight:800;font-family:var(--font-head);color:var(--green)">+34%</div></div>
+              <div style="background:var(--bg3);padding:12px;border-radius:8px"><div style="font-size:12px;color:var(--text2)">Adverse effects reduced via pharmacogenomics</div><div style="font-size:22px;font-weight:800;font-family:var(--font-head);color:var(--blue)">−52%</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANALYTICS -->
+      <div class="page" id="page-analytics">
+        <div class="sec-hdr"><h2>Analytics</h2><div class="hdr-acts"><button class="btn-sm">Download Report</button></div></div>
+        <div class="stats-grid">
+          <div class="stat-card bl"><div class="s-icon">📊</div><div class="s-val">73.2</div><div class="s-lbl">Global Life Expectancy</div><div class="s-chg up">↑ 0.3 yrs improvement</div></div>
+          <div class="stat-card gr"><div class="s-icon">💰</div><div class="s-val">41%</div><div class="s-lbl">Cost Reduction</div><div class="s-chg up">↑ Cloud model savings</div></div>
+          <div class="stat-card am"><div class="s-icon">🌍</div><div class="s-val">50%</div><div class="s-lbl">Lack Basic Access</div><div class="s-chg dn">↓ Critical gap remains</div></div>
+          <div class="stat-card pu"><div class="s-icon">🎯</div><div class="s-val">SDG 3</div><div class="s-lbl">UN Goal Alignment</div><div class="s-chg up">↑ On track</div></div>
+        </div>
+        <div class="grid2">
+          <div class="card"><div class="card-t">Regional Life Expectancy</div>
+            <div class="prog-item"><div class="prog-hdr"><span>Europe / Oceania</span><span style="color:var(--green)">79.1 yrs</span></div><div class="prog-bar"><div class="prog-fill" style="width:99%;background:var(--green)"></div></div></div>
+            <div class="prog-item"><div class="prog-hdr"><span>Americas</span><span style="color:var(--blue)">77.3 yrs</span></div><div class="prog-bar"><div class="prog-fill" style="width:97%;background:var(--blue)"></div></div></div>
+            <div class="prog-item"><div class="prog-hdr"><span>Asia</span><span style="color:var(--amber)">74.6 yrs</span></div><div class="prog-bar"><div class="prog-fill" style="width:94%;background:var(--amber)"></div></div></div>
+            <div class="prog-item"><div class="prog-hdr"><span>Africa</span><span style="color:var(--red)">63.8 yrs</span></div><div class="prog-bar"><div class="prog-fill" style="width:80%;background:var(--red)"></div></div></div>
+          </div>
+          <div class="card"><div class="card-t">Cloud Hospital Advantages</div>
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <div style="display:flex;align-items:center;gap:9px;padding:9px;background:var(--bg3);border-radius:8px"><span>💸</span><div><div style="font-size:13px;font-weight:500">Cost Efficiency</div><div style="font-size:11px;color:var(--text2)">Pay-as-you-go infrastructure</div></div></div>
+              <div style="display:flex;align-items:center;gap:9px;padding:9px;background:var(--bg3);border-radius:8px"><span>📡</span><div><div style="font-size:13px;font-weight:500">Remote Scalability</div><div style="font-size:11px;color:var(--text2)">Distribute care to underserved regions</div></div></div>
+              <div style="display:flex;align-items:center;gap:9px;padding:9px;background:var(--bg3);border-radius:8px"><span>🔒</span><div><div style="font-size:13px;font-weight:500">GDPR / HIPAA Compliant</div><div style="font-size:11px;color:var(--text2)">Encryption, threat detection, backups</div></div></div>
+              <div style="display:flex;align-items:center;gap:9px;padding:9px;background:var(--bg3);border-radius:8px"><span>🌱</span><div><div style="font-size:13px;font-weight:500">Environmental Sustainability</div><div style="font-size:11px;color:var(--text2)">Reduced physical infrastructure</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TELEMEDICINE -->
+      <div class="page" id="page-telemedicine">
+        <div class="sec-hdr"><h2>Telemedicine</h2><div class="hdr-acts"><button class="btn-sm pri">+ New Consultation</button></div></div>
+        <div class="stats-grid">
+          <div class="stat-card gr"><div class="s-icon">📹</div><div class="s-val">348</div><div class="s-lbl">Sessions Today</div><div class="s-chg up">↑ 18% from yesterday</div></div>
+          <div class="stat-card bl"><div class="s-icon">⏱️</div><div class="s-val">8.4m</div><div class="s-lbl">Avg Wait Time</div><div class="s-chg dn">↓ 23% improvement</div></div>
+          <div class="stat-card pu"><div class="s-icon">😊</div><div class="s-val">94%</div><div class="s-lbl">Patient Satisfaction</div><div class="s-chg up">↑ Excellent</div></div>
+          <div class="stat-card am"><div class="s-icon">🌐</div><div class="s-val">24</div><div class="s-lbl">Countries Connected</div><div class="s-chg up">↑ Global reach</div></div>
+        </div>
+        <div class="card"><div class="card-t">Upcoming Consultations</div>
+          <table class="data-table"><thead><tr><th>Patient</th><th>Doctor</th><th>Type</th><th>Time</th><th>Platform</th><th>Status</th></tr></thead><tbody>
+            <tr><td>Priya Menon</td><td>Dr. Anand</td><td>Cardiology Follow-up</td><td>2:30 PM</td><td>Video Call</td><td><span class="badge gr">Confirmed</span></td></tr>
+            <tr><td>Raj Kumar</td><td>Dr. Sharma</td><td>Diabetes Review</td><td>3:15 PM</td><td>Video Call</td><td><span class="badge bl">Waiting</span></td></tr>
+            <tr><td>Anika Nair</td><td>Dr. Patel</td><td>Mental Health CBT</td><td>4:00 PM</td><td>AI Chatbot</td><td><span class="badge am">Scheduled</span></td></tr>
+          </tbody></table>
+        </div>
+      </div>
+
+      <!-- EHR -->
+      <div class="page" id="page-ehr">
+        <div class="sec-hdr"><h2>Electronic Health Records</h2><div class="hdr-acts"><button class="btn-sm">FHIR Export</button><button class="btn-sm pri">New Record</button></div></div>
+        <div class="grid2">
+          <div class="card"><div class="card-t">EHR Databases Connected</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="background:var(--bg3);padding:11px;border-radius:8px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:500">MIMIC-IV</div><div style="font-size:11px;color:var(--text2)">ICU research database · Open access</div></div><span class="badge gr">Connected</span></div>
+              <div style="background:var(--bg3);padding:11px;border-radius:8px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:500">CPRD UK</div><div style="font-size:11px;color:var(--text2)">Clinical Practice Research Datalink</div></div><span class="badge gr">Connected</span></div>
+              <div style="background:var(--bg3);padding:11px;border-radius:8px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:500">CVD-COVID-UK</div><div style="font-size:11px;color:var(--text2)">Cardiovascular COVID research</div></div><span class="badge bl">Read-only</span></div>
+              <div style="background:var(--bg3);padding:11px;border-radius:8px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:500">Optum Clinformatics</div><div style="font-size:11px;color:var(--text2)">Commercial · Subscription</div></div><span class="badge am">Pending</span></div>
+            </div>
+          </div>
+          <div class="card"><div class="card-t">Data Insights</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="background:var(--bg3);padding:12px;border-radius:8px"><div style="font-size:12px;color:var(--text2)">Records analysed by AI</div><div style="font-size:22px;font-weight:800;font-family:var(--font-head);color:var(--accent)">2.4M</div></div>
+              <div style="background:var(--bg3);padding:12px;border-radius:8px"><div style="font-size:12px;color:var(--text2)">Early diagnoses enabled</div><div style="font-size:22px;font-weight:800;font-family:var(--font-head);color:var(--green)">14,820</div></div>
+              <div style="background:var(--bg3);padding:12px;border-radius:8px"><div style="font-size:12px;color:var(--text2)">GDPR compliance score</div><div style="font-size:22px;font-weight:800;font-family:var(--font-head);color:var(--blue)">99.7%</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="page" id="page-settings">
+        <div class="sec-hdr"><h2>Settings</h2></div>
+        <div class="card">
+          <div class="set-section">
+            <div class="set-title">Notifications</div>
+            <div class="set-row"><div><div class="set-lbl">Critical patient alerts</div><div class="set-desc">Immediate notification for ICU and emergency events</div></div><label class="tog"><input type="checkbox" checked><div class="tog-slider"></div></label></div>
+            <div class="set-row"><div><div class="set-lbl">AI diagnosis results</div><div class="set-desc">Notify when AI models complete inference</div></div><label class="tog"><input type="checkbox" checked><div class="tog-slider"></div></label></div>
+            <div class="set-row"><div><div class="set-lbl">Telemedicine reminders</div><div class="set-desc">15-minute appointment reminders</div></div><label class="tog"><input type="checkbox"><div class="tog-slider"></div></label></div>
+          </div>
+          <div class="set-section">
+            <div class="set-title">Privacy & Security</div>
+            <div class="set-row"><div><div class="set-lbl">Two-factor authentication</div><div class="set-desc">TOTP / SMS for secure login</div></div><label class="tog"><input type="checkbox" checked><div class="tog-slider"></div></label></div>
+            <div class="set-row"><div><div class="set-lbl">Session timeout (15 min)</div><div class="set-desc">Auto-logout after inactivity</div></div><label class="tog"><input type="checkbox" checked><div class="tog-slider"></div></label></div>
+            <div class="set-row"><div><div class="set-lbl">Audit logging</div><div class="set-desc">HIPAA/GDPR compliant access logs</div></div><label class="tog"><input type="checkbox" checked><div class="tog-slider"></div></label></div>
+          </div>
+          <div class="set-section">
+            <div class="set-title">AI Preferences</div>
+            <div class="set-row"><div><div class="set-lbl">Explainable AI mode</div><div class="set-desc">Show reasoning behind AI diagnoses</div></div><label class="tog"><input type="checkbox" checked><div class="tog-slider"></div></label></div>
+            <div class="set-row"><div><div class="set-lbl">Bias detection monitoring</div><div class="set-desc">Alert on potential algorithmic bias</div></div><label class="tog"><input type="checkbox" checked><div class="tog-slider"></div></label></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- LOGOUT CONFIRM -->
+<div id="logout-screen">
+  <div class="blob lo-blob1 blob"></div>
+  <div class="blob lo-blob2 blob"></div>
+  <div class="lo-card">
+    <div class="lo-icon">👋</div>
+    <div class="lo-title">Signing out</div>
+    <div class="lo-sub">Are you sure you want to log out?<br>Your session will be ended securely.</div>
+    <div class="btn-grp">
+      <button class="btn-sec" onclick="cancelLogout()">Stay logged in</button>
+      <button class="btn-pri" onclick="confirmLogout()">Yes, logout</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const pageTitles={overview:'Overview',patients:'Patient Records',monitoring:'Remote Patient Monitoring',imaging:'Medical Imaging',ai:'AI Engine',genomics:'Genomics',analytics:'Analytics',telemedicine:'Telemedicine',ehr:'EHR Records',settings:'Settings'};
+
+/* AUTH */
+function switchTab(t){
+  document.getElementById('tab-login').classList.toggle('active',t==='login');
+  document.getElementById('tab-signup').classList.toggle('active',t==='signup');
+  document.getElementById('apage-login').classList.toggle('show',t==='login');
+  document.getElementById('apage-signup').classList.toggle('show',t==='signup');
+}
+function toggleEye(id,eid){
+  const i=document.getElementById(id),e=document.getElementById(eid);
+  i.type=i.type==='password'?'text':'password';
+  e.textContent=i.type==='password'?'👁':'🙈';
+}
+function pickRole(el){document.querySelectorAll('.role-opt').forEach(r=>r.classList.remove('picked'));el.classList.add('picked')}
+function checkStr(v){
+  const segs=['ss1','ss2','ss3','ss4'].map(id=>document.getElementById(id));
+  const lbl=document.getElementById('str-lbl');
+  let s=0;
+  if(v.length>=8)s++;if(/[A-Z]/.test(v))s++;if(/[0-9]/.test(v))s++;if(/[^A-Za-z0-9]/.test(v))s++;
+  const cols=['#ef4444','#f59e0b','#3b82f6','#10b981'];
+  const labs=['Weak','Fair','Good','Strong'];
+  segs.forEach((sg,i)=>{sg.style.background=i<s?cols[s-1]:'var(--bg4)'});
+  lbl.textContent=v.length?(labs[s-1]||''):'';
+  lbl.style.color=v.length?(cols[s-1]||'var(--text3)'):'var(--text3)';
+}
+function doLogin(){
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('app-screen').classList.add('visible');
+  buildChart();
+}
+
+/* APP */
+function showPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(el)el.classList.add('active');
+  document.getElementById('page-title').textContent=pageTitles[id]||'Dashboard';
+}
+function toggleSB(){document.getElementById('sidebar').classList.toggle('collapsed')}
+
+/* LOGOUT */
+function showLogout(){
+  document.getElementById('app-screen').classList.remove('visible');
+  document.getElementById('logout-screen').classList.add('show');
+}
+function cancelLogout(){
+  document.getElementById('app-screen').classList.add('visible');
+  document.getElementById('logout-screen').classList.remove('show');
+}
+function confirmLogout(){
+  document.getElementById('logout-screen').classList.remove('show');
+  document.getElementById('auth-screen').style.display='flex';
+}
+
+/* CHART */
+function buildChart(){
+  const c=document.getElementById('adm-chart');
+  if(!c||c.innerHTML!=='')return;
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const inP=[65,80,72,90,85,55,48],outP=[110,130,120,145,138,90,75];
+  const mx=Math.max(...outP);
+  days.forEach((d,i)=>{
+    const w=document.createElement('div');w.className='bar-wrap';
+    const inner=document.createElement('div');inner.className='b-inner';
+    const b1=document.createElement('div');b1.className='bar b-bl';b1.style.height='0';
+    const b2=document.createElement('div');b2.className='bar b-gr';b2.style.height='0';
+    const lbl=document.createElement('div');lbl.className='bar-lbl';lbl.textContent=d;
+    inner.appendChild(b1);inner.appendChild(b2);w.appendChild(inner);w.appendChild(lbl);c.appendChild(w);
+    setTimeout(()=>{b1.style.height=(inP[i]/mx*100)+'%';b2.style.height=(outP[i]/mx*100)+'%'},100+i*55);
+  });
+}
+</script>
+</body>
+</html>
